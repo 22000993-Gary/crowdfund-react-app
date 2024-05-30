@@ -9,6 +9,7 @@ class AddCampaign extends Component {
             targetAmt: '',
             deadline: '',
             location: '',
+            loading: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -22,24 +23,34 @@ class AddCampaign extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
+        this.setState({ loading: true });
         const { name, image, targetAmt, deadline, location } = this.state;
-        console.log("Submitting form with data:", this.state);
         try {
+            // Call the addCampaign function from props
             await this.props.addCampaign(name, image, targetAmt, deadline, location);
+            // Reset form fields after successful submission
+            this.setState({
+                name: '',
+                image: '',
+                targetAmt: '',
+                deadline: '',
+                location: '',
+                loading: false
+            });
         } catch (error) {
             console.error("An error occurred while adding a campaign:", error);
+            // Handle error
+            this.setState({ loading: false });
         }
     }
 
     render() {
         return (
-            <div id="content">
-                <p>Total number of campaigns: {this.props.campaignCount}</p>
-                <h1>Add Campaign</h1>
+            <div id="content" className="container mt-5">
+                <h1 className="mb-4">Add Campaign</h1>
                 <form onSubmit={this.handleSubmit}>
-                    <div className="form-group mr-sm-2">
+                    <div className="form-group mb-4">
                         <input
-                            id="campaignName"
                             type="text"
                             name="name"
                             value={this.state.name}
@@ -49,23 +60,21 @@ class AddCampaign extends Component {
                             required
                         />
                     </div>
-                    <br />
-                    <div className="form-group mr-sm-2">
+
+                    <div className="form-group mb-4">
                         <input
-                            id="campaignImage"
                             type="text"
                             name="image"
                             value={this.state.image}
                             onChange={this.handleChange}
                             className="form-control"
-                            placeholder="Campaign Image"
+                            placeholder="Campaign Image URL"
                             required
                         />
                     </div>
-                    <br />
-                    <div className="form-group mr-sm-2">
+
+                    <div className="form-group mb-4">
                         <input
-                            id="campaignTargetAmt"
                             type="number"
                             name="targetAmt"
                             value={this.state.targetAmt}
@@ -75,10 +84,9 @@ class AddCampaign extends Component {
                             required
                         />
                     </div>
-                    <br />
-                    <div className="form-group mr-sm-2">
+
+                    <div className="form-group mb-4">
                         <input
-                            id="campaignDeadline"
                             type="date"
                             name="deadline"
                             value={this.state.deadline}
@@ -88,10 +96,9 @@ class AddCampaign extends Component {
                             required
                         />
                     </div>
-                    <br />
-                    <div className="form-group mr-sm-2">
+
+                    <div className="form-group mb-4">
                         <input
-                            id="campaignLocation"
                             type="text"
                             name="location"
                             value={this.state.location}
@@ -101,8 +108,10 @@ class AddCampaign extends Component {
                             required
                         />
                     </div>
-                    <br />
-                    <button type="submit" className="btn btn-primary">Add Campaign</button>
+
+                    <button type="submit" className="btn btn-primary" disabled={this.state.loading}>
+                        {this.state.loading ? "Adding Campaign..." : "Add Campaign"}
+                    </button>
                 </form>
             </div>
         );
@@ -110,6 +119,8 @@ class AddCampaign extends Component {
 }
 
 export default AddCampaign;
+
+
 
 
 

@@ -1,5 +1,5 @@
 const AboutUs = () => {
-    return <h1> Singapore pet shop sells pets with the help of blockchain </h1>;
+    return <h1>Crowd funding app in Singapore </h1>;
 };
 
 export default AboutUs;
